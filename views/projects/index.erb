@@ -1,0 +1,7 @@
+<h1>Select Project</h1>
+<ol>
+  <%@projects.each do |project|%>
+    <li><a href="/project/<%=project.id%>"><%=project.name%></li>
+  <%end%>
+</ol>
+<a href="/projects/new">New Project</a>

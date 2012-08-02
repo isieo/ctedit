@@ -1,0 +1,14 @@
+<form action="/projects/<%=params[:id]%>" method="post">
+  <div>
+    <label for="name">Project Name</label>
+    <input id="name" type="text" name="project[name]" value="<%=@project.name%>" />
+  </div>
+  <div>
+    <label for="path">Project Path</label>
+    <input id="path" type="text" name="project[path]" value="<%=@project.path%>"/>
+  </div>
+  <div>
+    <input name="_method" value="put" type="hidden">
+    <button type="submit">Edit</button>
+  </div>
+</form>

@@ -1,0 +1,232 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link rel="stylesheet" href="/stylesheets/styles.css" type="text/css" media="screen" charset="utf-8">
+    <link rel="stylesheet" href="/stylesheets/jquery.treeview.css" type="text/css" media="screen" charset="utf-8">
+    <script type="text/javascript"></script>
+  </head>
+  <body>
+  <table id="controls">
+    <tr>
+      <td>
+        <label for="doc">Document</label>
+      </td><td>
+        <select id="doc" size="1">
+          <option value="js">JavaScript</option>
+          <option value="plain">Plain Text</option>
+          <option value="svg">SVG</option>
+          <option value="html">HTML</option>
+          <option value="css">CSS</option>
+          <option value="scss">SCSS</option>
+          <option value="coffee">CoffeeScript</option>
+          <option value="json">JSON</option>
+          <option value="python">Python</option>
+          <option value="ruby">Ruby</option>
+          <option value="perl">Perl</option>
+          <option value="php">PHP</option>
+          <option value="java">Java</option>
+          <option value="csharp">C#</option>
+          <option value="c_cpp">C++</option>
+          <option value="clojure">Clojure</option>
+          <option value="ocaml">OCaml</option>
+          <option value="textile">Textile</option>
+          <option value="groovy">Groovy</option>
+          <option value="scala">Scala</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td >
+        <label for="mode">Mode</label>
+      </td><td>
+        <select id="mode" size="1">
+          <option value="text">Plain Text</option>
+          <option value="javascript">JavaScript</option>
+          <option value="xml">XML</option>
+          <option value="html">HTML</option>
+          <option value="css">CSS</option>
+          <option value="scss">SCSS</option>
+          <option value="python">Python</option>
+          <option value="php">PHP</option>
+          <option value="java">Java</option>
+          <option value="ruby">Ruby</option>
+          <option value="c_cpp">C/C++</option>
+          <option value="coffee">CoffeeScript</option>
+          <option value="json">JSON</option>
+          <option value="perl">Perl</option>
+          <option value="clojure">Clojure</option>
+          <option value="ocaml">OCaml</option>
+          <option value="csharp">C#</option>
+          <option value="svg">SVG</option>
+          <option value="textile">Textile</option>
+          <option value="groovy">Groovy</option>
+          <option value="scala">Scala</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label for="split">Split</label>
+      </td><td>
+        <select id="split" size="1">
+          <option value="none">None</option>
+          <option value="below">Below</option>
+          <option value="beside">Beside</option>
+        </select>
+      </td>
+    </tr>
+    </table>
+    <div>
+    <input id="root_path" disabled="disabled" value="">
+      <div id="browser" size="1">
+      </div>
+    </div>
+    <%=yield%>
+    <script src="/javascripts/jquery.js" data-ace-base="src" type="text/javascript" charset="utf-8"></script>
+    <script src="/javascripts/jquery.treeview.js" data-ace-base="src" type="text/javascript" charset="utf-8"></script>
+    <script src="/javascripts/jquery.treeview.edit.js" data-ace-base="src" type="text/javascript" charset="utf-8"></script>
+    <script src="/javascripts/jquery.treeview.async.js" data-ace-base="src" type="text/javascript" charset="utf-8"></script>
+    <script src="/javascripts/ace/src/ace.js" data-ace-base="src" type="text/javascript" charset="utf-8"></script>
+    <script src="/javascripts/ace/src/cockpit.js" data-ace-base="src" type="text/javascript" charset="utf-8"></script>
+    <script src="/javascripts/ace/src/mode-coffee.js"></script>
+    <script src="/javascripts/ace/src/mode-c_cpp.js"></script>
+    <script src="/javascripts/ace/src/mode-clojure.js"></script>
+    <script src="/javascripts/ace/src/mode-coffee.js"></script>
+    <script src="/javascripts/ace/src/mode-csharp.js"></script>
+    <script src="/javascripts/ace/src/mode-css.js"></script>
+    <script src="/javascripts/ace/src/mode-groovy.js"></script>
+    <script src="/javascripts/ace/src/mode-html.js"></script>
+    <script src="/javascripts/ace/src/mode-java.js"></script>
+    <script src="/javascripts/ace/src/mode-javascript.js"></script>
+    <script src="/javascripts/ace/src/mode-json.js"></script>
+    <script src="/javascripts/ace/src/mode-ocaml.js"></script>
+    <script src="/javascripts/ace/src/mode-perl.js"></script>
+    <script src="/javascripts/ace/src/mode-php.js"></script>
+    <script src="/javascripts/ace/src/mode-python.js"></script>
+    <script src="/javascripts/ace/src/mode-ruby.js"></script>
+    <script src="/javascripts/ace/src/mode-scad.js"></script>
+    <script src="/javascripts/ace/src/mode-scss.js"></script>
+    <script src="/javascripts/ace/src/mode-textile.js"></script>
+    <script src="/javascripts/ace/src/mode-xml.js"></script>
+    <script src="/javascripts/ace/src/theme-twilight.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+    jQuery.noConflict();
+    function initTrees() {
+      jQuery("#browser").treeview({
+        url: $projectTreePath,
+        // add some additional, dynamic data and request with POST
+        ajax: {
+          data: {
+            "time": function() {
+              return "" + new Date;
+            }
+          },
+          type: "get",
+        }
+      });
+    }
+    var $sessions = {};
+    var canon = require("pilot/canon");
+    var event = require("pilot/event");
+    var Range = require("ace/range").Range;
+    var Editor = require("ace/editor").Editor;
+    var Renderer = require("ace/virtual_renderer").VirtualRenderer;
+    var theme = require("ace/theme/textmate");
+    var EditSession = require("ace/edit_session").EditSession;
+
+    var JavaScriptMode = require("ace/mode/javascript").Mode;
+    var CssMode = require("ace/mode/css").Mode;
+    var ScssMode = require("ace/mode/scss").Mode;
+    var HtmlMode = require("ace/mode/html").Mode;
+    var XmlMode = require("ace/mode/xml").Mode;
+    var PythonMode = require("ace/mode/python").Mode;
+    var PhpMode = require("ace/mode/php").Mode;
+    var JavaMode = require("ace/mode/java").Mode;
+    var CSharpMode = require("ace/mode/csharp").Mode;
+    var RubyMode = require("ace/mode/ruby").Mode;
+    var CCPPMode = require("ace/mode/c_cpp").Mode;
+    var CoffeeMode = require("ace/mode/coffee").Mode;
+    var JsonMode = require("ace/mode/json").Mode;
+    var PerlMode = require("ace/mode/perl").Mode;
+    var ClojureMode = require("ace/mode/clojure").Mode;
+    var OcamlMode = require("ace/mode/ocaml").Mode;
+    var TextileMode = require("ace/mode/textile").Mode;
+    var TextMode = require("ace/mode/text").Mode;
+    var GroovyMode = require("ace/mode/groovy").Mode;
+
+    var UndoManager = require("ace/undomanager").UndoManager;
+    var current_session;
+
+    jQuery(document).ready(function(){
+      aeditor = ace.edit("editor");
+      aeditor.setTheme("ace/theme/twilight");
+      aeditor.setFontSize(16);
+      jQuery('#root_path').val($rootPath);
+      initTrees();
+      aeditor.setSession(new EditSession("lala"));
+      aeditor.getSession().setMode(new JavaScriptMode());
+      current_session = aeditor.getSession();
+    });
+
+    function fileClicked(element){
+		var filename = element.data('file');
+        if ($sessions[filename] === undefined){
+          jQuery.get($projectDataPath,{path: filename}, function(data) {
+            $sessions[filename] = {}
+            $sessions[filename]['modified'] = data.modified_time
+            $sessions[filename]['session'] = new EditSession(data.data)
+            
+                if (/^.*\.js$/i.test(filename)) {
+                   $sessions[filename]['session'].setMode(new JavaScriptMode());
+                } else if (/^.*\.xml$/i.test(filename)) {
+                    $sessions[filename]['session'].setMode(new XmlMode());
+                } else if (/^.*\.html$/i.test(filename)) {
+                    $sessions[filename]['session'].setMode(new HtmlMode());
+                } else if (/^.*\.css$/i.test(filename)) {
+                    $sessions[filename]['session'].setMode(new CssMode());
+                } else if (/^.*\.scss$/i.test(filename)) {
+                    $sessions[filename]['session'].setMode(new ScssMode());
+                } else if (/^.*\.py$/i.test(filename)) {
+                    $sessions[filename]['session'].setMode(new PythonMode());
+                } else if (/^.*\.php$/i.test(filename)) {
+                    $sessions[filename]['session'].setMode(new PhpMode());
+                } else if (/^.*\.cs$/i.test(filename)) {
+                    $sessions[filename]['session'].setMode(new cSharpMode());
+                } else if (/^.*\.java$/i.test(filename)) {
+                    $sessions[filename]['session'].setMode(new JavaMode());
+                } else if (/^.*\.rb$/i.test(filename)) {
+                    $sessions[filename]['session'].setMode(new RubyMode());
+                } else if (/^.*\.(c|cpp|h|hpp|cxx)$/i.test(filename)) {
+                    $sessions[filename]['session'].setMode(new CCPPMode());
+                } else if (/^.*\.coffee$/i.test(filename)) {
+                    $sessions[filename]['session'].setMode(new CoffeeMode());
+                } else if (/^.*\.json$/i.test(filename)) {
+                    $sessions[filename]['session'].setMode(new JsonMode());
+                } else if (/^.*\.(pl|pm)$/i.test(filename)) {
+                    $sessions[filename]['session'].setMode(new PerlMode());
+                } else if (/^.*\.(ml|mli)$/i.test(filename)) {
+                    $sessions[filename]['session'].setMode(new OcamlMode());
+                } else if (/^.*\.(groovy)$/i.test(filename)) {
+                    $sessions[filename]['session'].setMode(new GroovyMode());
+                }
+            aeditor.setSession($sessions[filename]['session']);
+            current_session = aeditor.getSession();
+          },'json');
+        }else{
+          jQuery.get($projectDataTimePath,{path: filename}, function(data) {
+            if ($sessions[filename] === undefined || data.mtime > $sessions[filename]['modified']) {
+              $sessions[filename] = {}
+              $sessions[filename]['modified'] = data.modified_time
+              $sessions[filename]['session'] = new EditSession(data.data)
+              aeditor.setSession($sessions[filename]['session']);
+            }else{
+              aeditor.setSession($sessions[filename]['session']);
+            }
+            current_session = aeditor.getSession();
+          },'json');
+        }
+    }
+    </script>
+  </body>
+</html>

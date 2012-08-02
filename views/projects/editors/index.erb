@@ -1,0 +1,11 @@
+<div id="tabs"></div>
+<div id="editor">
+</div>
+<script>
+var $serverTime= new Date();
+$serverTime = <%=Time.now.to_i * 100%>;
+var $projectTreePath="/projects/_data/<%=@project.id%>";
+var $projectDataPath="/projects/<%=@project.id%>/_data";
+var $projectDataTimePath="/projects/<%=@project.id%>/_data/mtime";
+var $rootPath="<%=@project.path%>";
+</script>
